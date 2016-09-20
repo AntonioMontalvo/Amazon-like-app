@@ -63,6 +63,44 @@ function ask() {
 				})
 			}
 
+			if (answers.List[0] == 'Add to Inventory'){
+				
+
+
+
+				inquirer.prompt([
+					{
+						name: "ItemID",
+						message: "What's the ItemID?"
+					},
+					{
+						name: "StockQuantity",
+						message: "How many items are you going to add?"
+					}
+				]).then(function(answer) {
+
+					// var inStock = answer.ItemID;
+
+					// connection.query('SELECT StockQuantity FROM Products WHERE ItemID = ?' , inStock,function(err, res) {
+					//     if (err) throw err;
+					//     // inStock = res[0].ItemID;
+					//     console.log(res);
+					// })
+
+					// var total = parseInt(answer.StockQuantity) + parseInt(inStock);
+
+					connection.query("UPDATE products SET ? WHERE ?", [{
+						    StockQuantity:  answer.StockQuantity
+						}, {
+						    ItemID: answer.ItemID
+						}], function(err, res) {
+							if (err) throw err;
+						ask();
+						});
+				})
+			}
+
+
 			if(answers.List[0] == 'Add New Product'){
 			
 				inquirer.prompt([
