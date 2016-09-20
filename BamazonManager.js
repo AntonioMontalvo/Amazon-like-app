@@ -61,9 +61,42 @@ function ask() {
 					    }
 					    ask();
 				})
-
 			}
 
-		});
+			if(answers.List[0] == 'Add New Product'){
+			
+				inquirer.prompt([
+					{
+						name: "ProductName",
+						message: "What's the product's name?"
+					},
+					{
+						name: "DepartmentName",
+						message: "What department?"
+					},
+					{
+						name: "Price",
+						message: "Price?"
+					},
+					{
+						name: "StockQuantity",
+						message: "How Many"
+					}
+				]).then(function(answer) {
+					var newProduct = {
+						ProductName: answer.ProductName, 
+						DepartmentName: answer.DepartmentName, 
+						Price: answer.Price,
+						StockQuantity: answer.StockQuantity
+					};	
+
+					connection.query('INSERT INTO products SET ?', newProduct, function(err, res) {
+						if (err) throw err;
+						ask();
+					})
+
+			})			
+		}
+	});
 }
 ask();		
