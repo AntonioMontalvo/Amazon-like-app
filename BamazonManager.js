@@ -22,7 +22,7 @@ function ask() {
 		    message: 'Manager, choose from the menu options!',
 		    name: 'List',
 		    choices: [
-		      new inquirer.Separator(' = Options = '),
+		      new inquirer.Separator(' SELECT FROM THE OPTIONS BELOW  '),
 		      {
 		        name: 'View Products for Sale'
 		      },
@@ -50,9 +50,19 @@ function ask() {
 				})
 			}
 
-			// if(answers.List[0] == 'View Low Inventory'){
+			if(answers.List[0] == 'View Low Inventory'){
 
-			// }
+				connection.query('SELECT ProductName FROM Products WHERE StockQuantity  < 5', function(err, res) {
+					if (err) throw err;
+						console.log('On this products we less than five available in stock');
+					    for( var i = 0; i < res.length; i++){
+					    	console.log(res[i].ProductName);
+					    	console.log("");
+					    }
+					    ask();
+				})
+
+			}
 
 		});
 }
