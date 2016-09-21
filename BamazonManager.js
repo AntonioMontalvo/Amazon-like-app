@@ -2,11 +2,11 @@
 //     MANAGER VIEW        //
 /////////////////////////////	
 //npm install mysql
-
+//npm install inquirer
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 
-var connection = mysql.createConnection({
+var connection = mysql.createConnection({//mysql-node connection
     host: "localhost",
     port: 3306,
     user: "root", //Your username
@@ -16,7 +16,7 @@ var connection = mysql.createConnection({
 
 
 function ask() {
-		inquirer.prompt([
+		inquirer.prompt([ //ask questions
 		  {
 		    type: 'checkbox',
 		    message: 'Manager, choose from the menu options!',
@@ -37,10 +37,10 @@ function ask() {
 		      },
 		    ]  
 		  }
-		]).then(function (answers) {
+		]).then(function (answers) { //
 			if(answers.List[0] == 'View Products for Sale' ){
 				
-				connection.query('SELECT * FROM Products', function(err, res) {
+				connection.query('SELECT * FROM Products', function(err, res) {//get the products from the Products table
 				    if (err) throw err;
 					    for( var i = 0; i < res.length; i++){
 					    	console.log('Product Name: '+ res[i].ProductName +" | "+ "Product Price: $" + res[i].Price + " | " + "In Stock: " +res[i].StockQuantity);
@@ -50,7 +50,7 @@ function ask() {
 				})
 			}
 
-			if(answers.List[0] == 'View Low Inventory'){
+			if(answers.List[0] == 'View Low Inventory'){//get the Product name that passes the test
 
 				connection.query('SELECT ProductName FROM Products WHERE StockQuantity  < 5', function(err, res) {
 					if (err) throw err;
@@ -64,9 +64,6 @@ function ask() {
 			}
 
 			if (answers.List[0] == 'Add to Inventory'){
-				
-
-
 
 				inquirer.prompt([
 					{
@@ -74,23 +71,17 @@ function ask() {
 						message: "What's the ItemID?"
 					},
 					{
+						name: "InStockNow",
+						message: "How many in stock now?"
+					},
+					{
 						name: "StockQuantity",
 						message: "How many items are you going to add?"
 					}
 				]).then(function(answer) {
 
-					// var inStock = answer.ItemID;
-
-					// connection.query('SELECT StockQuantity FROM Products WHERE ItemID = ?' , inStock,function(err, res) {
-					//     if (err) throw err;
-					//     // inStock = res[0].ItemID;
-					//     console.log(res);
-					// })
-
-					// var total = parseInt(answer.StockQuantity) + parseInt(inStock);
-
-					connection.query("UPDATE products SET ? WHERE ?", [{
-						    StockQuantity:  answer.StockQuantity
+					connection.query("UPDATE products SET ? WHERE ?", [{//update database
+						    StockQuantity:  parseInt(answer.StockQuantity) + parseInt(answer.InStockNow)
 						}, {
 						    ItemID: answer.ItemID
 						}], function(err, res) {
@@ -101,7 +92,7 @@ function ask() {
 			}
 
 
-			if(answers.List[0] == 'Add New Product'){
+			if(answers.List[0] == 'Add New Product'){//add to database
 			
 				inquirer.prompt([
 					{
