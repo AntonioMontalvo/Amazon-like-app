@@ -1,7 +1,7 @@
 # Amazon-like-app
 
 #### Instructions:
-
+##video: https://youtu.be/j6kJyjTE6U4
 ### Challenge #1: Customer View (Minimum Requirement)
 
 1. Create a MySQL Database called `Bamazon`.
